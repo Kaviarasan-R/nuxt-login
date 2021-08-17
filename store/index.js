@@ -3,7 +3,14 @@ export const state = () => ({
 })
 
 export const mutations = {
-  addUser(state, {email,password}) {
-    state.User.push({email,password})
+  add(state, {firstname,lastname,username,location,email,password2}) {
+    state.User.push({
+      firstname,
+      lastname,
+      username,
+      location,
+      email,
+      password2
+    })
   }
 }

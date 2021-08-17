@@ -1,119 +1,158 @@
 <template>
-	<div class="main">
-		<div class="form-container">
-			<div class="card bg-light mb-3" style="max-width: 20rem;">
-			  <h3 class="card-header">Login</h3>
-			  <form class="needs-validation" @submit.prevent="loginUser" novalidate>
-				  <div class="card-body">
-					  <div class="form-group row">
-					    <h5 class="card-title mb-9 mr-3" for="colFormLabel">Email</h5><br>
-					    <div class="col-sm-10">
-					      <input type="email" class="form-control mb-3" v-model="formData.email" id="colFormLabel" placeholder="Email">
-					    </div>
-						  <div class="form-group">
-						    <h5 class="card-title mb-9 mr-3" for="inputPassword6" >Password</h5>
-						    <input type="password" id="inputPassword6" class="form-control pass" v-model="formData.password" aria-describedby="passwordHelpInline" placeholder="Password">
-						  </div>
-			        <div class="col-auto">
-						    <div class="form-check mb-2">
-						      <input class="form-check-input" type="checkbox" id="autoSizingCheck">
-						      <label class="form-check-label" for="autoSizingCheck">
-						        Remember me
-						      </label>
-						    </div>
-						  </div>
-					  </div>
-			      <b-button variant="primary" type="submit" @click="modalShow = !modalShow">Login</b-button>
-  					<b-modal v-model="modalShow" title="Login Page">{{mes}}</b-modal>
-  					<NuxtLink to="/" class="reg" >Register</NuxtLink>
-				  </div>
-				</form>
-			</div>
-		</div>
-	</div>
+  <div>
+    <v-card app flat class="login__card">
+      <v-card-title class="login__header justify-center">LOGIN</v-card-title>
+      <v-form @submit.prevent="loginUser" name="myForm">
+        <v-container>
+          <v-row>
+            <v-col
+              cols="12"
+              sm="12"
+            > 
+              <v-layout column align-center>
+                <v-avatar
+                  color="primary"
+                  size="85"
+                  class="avatar__logo"
+                >
+                  <img :src="image" class="login__image" />
+                </v-avatar>
+              </v-layout>
+            </v-col>
+            <v-col
+              cols="12"
+              sm="12"
+              md="12"
+            >
+              <v-text-field
+                v-model="formData.name"
+                label="Email or Username"
+                placeholder="Email or Username"
+                name="email"
+                filled
+                rounded
+                dense
+              ></v-text-field>
+            </v-col>
+            <v-col
+              cols="12"
+              sm="12"
+              md="12"
+            >
+              <v-text-field
+                v-model="formData.password"
+                label="Password"
+                placeholder="Password"
+                :type="'password'"
+                name="password"
+                filled
+                rounded
+                dense
+              ></v-text-field>
+            </v-col>
+    
+          </v-row>
+        </v-container>
+        <v-card-actions class="justify-center">
+          <v-btn
+            color="primary"
+            elevation="23"
+            large
+            class="mb-3 ml-3 login__button"
+            type="submit"
+            @click="snackbar = true"
+          > Login </v-btn>
+
+          <v-snackbar
+            v-model="snackbar"
+            :timeout="timeout"
+            top
+          >
+          {{ mes }}
+
+            <template v-slot:action="{ attrs }">
+              <v-btn
+                color="blue"
+                text
+                v-bind="attrs"
+                @click="snackbar = false"
+              >
+              Close
+              </v-btn>
+            </template>
+          </v-snackbar>
+
+        </v-card-actions>
+      </v-form>
+    </v-card>
+  </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
-export default {
-	data() {
-		return {
-			formData: {
-				email: null,
-				password: null
-			},
-			modalShow: false,
-			mes: null
-		}
-	},
-  computed: {
-    ...mapState(['User'])
-  },
-	methods: {
-		loginUser() {
-			const {email,password} = this.formData
-			if(this.User[0] == null){
-				this.mes = 'Sorry, there is no registered user'
-			}else if (email == "" || password == "") {
-				alert("Every fields must be filled out");
-				return false;
-			} else if(this.User[0].email == email && this.User[0].password == password){
-				this.mes = 'Login Successfull'
-			} else if(this.User[0].email !== email && this.User[0].password !== password) {
-				this.mes = 'Sorry, Email or Password is incorrect'
-			}
-			this.formData= {
-				email: null,
-				password: null
-			}
-		}
-	}
-}
+import {image} from 'assets/img'
+import {mapState} from 'vuex'
 
+export default {
+  data() {
+    return {
+      image: image,
+      formData: {
+        name: null,
+        password: ''
+      },
+
+      mes: '',
+      snackbar: false,
+      timeout: 2000,
+    }
+  },
+  computed: {
+    ...mapState(["User"])
+  },
+  methods: {
+    loginUser() {
+      const {name,password} = this.formData
+      console.log({name,password})
+      if(!name || !password) {
+        this.mes = 'Every fields must be filled out';
+      }else if(!this.User[0]) {
+        this.mes = "Sorry, there is no registered user";
+      }else if( (this.User[0].username == name || this.User[0].email == name ) && this.User[0].password2 == password) {
+        this.mes = "Login Successfully"
+      }else if( (this.User[0].username !== name || this.User[0].email !== name) || this.User[0].password2 !== password) {
+        this.mes = "Sorry, Email or Password is incorrect";
+      }
+      console.log(this.mes);
+      
+      this.formData = {
+        name: null,
+        password: ''
+      }
+
+    }
+  }
+}
 </script>
 
-<style lang="css" scoped>
-.main {
-	width: 100%;
-	height: 100%;
-	background-color: rgb(32, 33, 36);
-}
-.card {
-	height: 24rem;
-}
-.card-header {
-	color: black;
-	text-align: center;
-}
-.card-title{
-	margin-left: 35px;
-}
-.reg{
-	margin-left: 20px;
-}
-.card-body {
-	color: black;
-}
-.card title {
-	color: black;
-	text-align: center;
-}
-.form-control {
-	margin-left: 20px;
-}
-.pass {
-	margin-left: 33px;
-}
-.form-check, .btn{
-	margin-left: 20px;
-}
-.form-container {
-	width: 600px;
-	height: 300px;
-	display: flex;
-	justify-content: center;
-	margin-top: 170px;
-	margin-left: 380px;
-	color: white;
+<style lang="scss" scoped>
+div{
+  margin: auto;
+  position: relative;
+  .login__card {
+    max-width: $card-login-width;
+    max-height: $card-login_height;
+    margin-top: 35px;
+    .login__header {
+      font-family: $font;
+    }
+    .avatar__logo {
+
+    }
+    .login__button {
+      font-family: $font;
+    }
+  }
 }
 </style>
+
+

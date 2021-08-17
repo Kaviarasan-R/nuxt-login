@@ -1,157 +1,226 @@
 <template>
-	<div class="main">
-		<h1 class="header">Register</h1>
-		<NuxtLink to="/login">Login</NuxtLink>
-		<div class="form-container">
-			<form class="needs-validation" @submit.prevent="registerUser" name="myForm" novalidate>
-			  <div class="form-row">
-			    <div class="col-md-4 mb-3">
-			      <label for="validationCustom01">First name</label>
-			      <input type="text" class="form-control" v-model="formData.firstname" id="validationCustom01" placeholder="First name" name="firstname" required>
-			      <div class="valid-feedback">
-			        Looks good!
-			      </div>
-			    </div>
-			    <div class="col-md-4 mb-3">
-			      <label for="validationCustom02">Last name</label>
-			      <input type="text" class="form-control" v-model="formData.lastname" id="validationCustom02" placeholder="Last name" name="lastname" required>
-			      <div class="valid-feedback">
-			        Looks good!
-			      </div>
-			    </div>
-			    <div class="col-md-4 mb-3">
-			      <label for="validationCustomUsername">Username</label>
-			      <div class="input-group">
-			        <div class="input-group-prepend">
-			          <span class="input-group-text" id="inputGroupPrepend">@</span>
-			        </div>
-			        <input type="text" class="form-control" v-model="formData.username" id="validationCustomUsername" placeholder="Username" name="username" aria-describedby="inputGroupPrepend" required>
-			        <div class="invalid-feedback">
-			          Please choose a username.
-			        </div>
-			      </div>
-			    </div>
-			  </div>
-			  <div class="form-row">
-			    <div class="col-md-6 mb-3">
-			      <label for="validationCustom03">City</label>
-			      <input type="text" class="form-control" v-model="formData.city" id="validationCustom03" placeholder="City" name="city" required>
-			      <div class="invalid-feedback">
-			        Please provide a valid city.
-			      </div>
-			    </div>
-			    <div class="col-md-3 mb-3">
-			      <label for="validationCustom04">State</label>
-			      <input type="text" class="form-control" name="state" v-model="formData.state" id="validationCustom04" placeholder="State" required>
-			      <div class="invalid-feedback">
-			        Please provide a valid state.
-			      </div>
-			    </div>
-			    <div class="col-md-3 mb-3">
-			      <label for="validationCustom05">Zip</label>
-			      <input type="text" class="form-control" name="zip" v-model="formData.zip" id="validationCustom05" placeholder="Zip" required>
-			      <div class="invalid-feedback">
-			        Please provide a valid zip.
-			      </div>
-			    </div>
-			  </div>
-		    <div class="form-row">
-		      <div class="col-md-6 mb-3">
-				    <label for="inputEmail3">Email</label>
-			      <input type="email" class="form-control" name="email" v-model="formData.email" id="inputEmail3" placeholder="Email" required>
-				  </div>
-				  <div class="col-md-6 mb-3">
-				    <label for="inputPassword3">Password</label>
-			      <input type="password" name="password" class="form-control" v-model="formData.password" id="inputPassword3" placeholder="Password" required>
-				  </div>
-				</div>
-			  <div class="form-group">
-			    <div class="form-check">
-			      <input class="form-check-input" name="check" type="checkbox" value="" id="invalidCheck" required>
-			      <label class="form-check-label" for="invalidCheck">
-			        Agree to terms and conditions
-			      </label>
-			      <div class="invalid-feedback">
-			        You must agree before submitting.
-			      </div>
-			    </div>
-			  </div>
-			  <button class="btn btn-primary" type="submit">Register</button>
-			</form>
-		</div>
-	</div>
+  <div>
+    <v-card app flat class="register__card">
+      <v-card-title class="register__header justify-center">REGISTER</v-card-title>
+      <v-form @submit.prevent="registerUser" name="myForm">
+        <v-container>
+          <v-row>
+            <v-col
+              cols="12"
+              sm="4"
+            >
+              <v-text-field
+                label="First Name"
+                filled
+                v-model="formData.firstname"
+              ></v-text-field>
+            </v-col>
+
+            <v-col
+              cols="12"
+              sm="4"
+            >
+              <v-text-field
+                label="Last Name"
+                filled
+                v-model="formData.lastname"
+              ></v-text-field>
+            </v-col>
+
+            <v-col
+              cols="12"
+              sm="4"
+            >
+              <v-text-field
+                label="User Name"
+                filled
+                v-model="formData.username"
+              ></v-text-field>
+            </v-col>
+
+            <v-col
+              cols="12"
+              sm="6"
+            >
+              <v-text-field
+                filled
+                label="Location"
+                append-icon="mdi-map-marker"
+                v-model="formData.location"
+              ></v-text-field>
+            </v-col>
+
+            <v-col
+              cols="12"
+              sm="6"
+            >
+              <v-text-field
+                label="Your Email ID"
+                hint="example@gmail.com"
+                v-model="formData.email"
+                persistent-hint
+                filled
+              ></v-text-field>
+            </v-col>
+
+            <v-col
+              cols="12"
+              sm="6"
+            >
+              <v-text-field
+                v-model="formData.password1"
+                :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
+                :rules="[rules.required, rules.min]"
+                :type="show2 ? 'text' : 'password'"
+                name="input-10-2 createpassword"
+                label="Create Password"
+                hint="At least 8 characters"
+                value=""
+                class="input-group--focused"
+                @click:append="show2 = !show2"
+              ></v-text-field>
+            </v-col>
+
+            <v-col
+              cols="12"
+              sm="6"
+            >
+              <v-text-field
+                v-model="formData.password2"
+                :append-icon="show3 ? 'mdi-eye' : 'mdi-eye-off'"
+                :rules="[rules.required, rules.min]"
+                :type="show3 ? 'text' : 'password'"
+                name="input-10-2 confirmpassword"
+                label="Confirm Password"
+                hint="At least 8 characters"
+                value=""
+                class="input-group--focused"
+                @click:append="show3 = !show3"
+              ></v-text-field>
+            </v-col>
+
+            <v-col cols="12" sm="6">
+              <v-checkbox v-model="formData.checkbox" class="check">
+                <template v-slot:label>
+                  <div>
+                    I agree to <span id="terms">terms</span> and conditions
+                  </div>
+                </template>
+              </v-checkbox>
+            </v-col>
+
+          </v-row>
+        </v-container>
+        <v-card-actions class="justify-center">
+          <v-btn
+            color="primary"
+            elevation="23"
+            large
+            class="mb-3 ml-3 my-0 register__button"
+            type="submit"
+            @click="snackbar = true"
+          > Register </v-btn>
+
+          <v-snackbar
+            v-model="snackbar"
+            :timeout="timeout"
+            top
+          >
+          {{ mes }}
+
+            <template v-slot:action="{ attrs }">
+              <v-btn
+                color="blue"
+                text
+                v-bind="attrs"
+                @click="snackbar = false"
+              >
+              Close
+              </v-btn>
+            </template>
+          </v-snackbar>
+
+        </v-card-actions>
+      </v-form>
+    </v-card>
+  </div>
 </template>
 
 <script>
-import {mapMutations} from "vuex"
+import { mapMutations } from 'vuex'
 
 export default {
-	data() {
-		return {
-			formData: {
-				firstname: null,
-				lastname: null,
-				username: null,
-				city: null,
-				state: null,
-				zip: null,
-				email: null,
-				password: null
-			}
-		}
-	},
-	methods: {
-		...mapMutations(['addUser']),
-		registerUser() {
-			const {firstname,lastname,username,city,state,zip,email,password} = this.formData
-			const payload = {firstname,lastname,username,city,state,zip,email,password}
-			if(firstname == "" || lastname == "" || username == "" || city == "" || state == "" || zip
-				== "" || email == "" || password == "") {
-				alert("Every fields must be filled out");
-				return false;
-			}else {
-		    this.addUser(payload)
-				this.formData= {
-					firstname: null,
-					lastname: null,
-					username: null,
-					city: null,
-					state: null,
-					zip: null,
-					email: null,
-					password: null
-				}					
-			}
-		}
-	}
+  data () {
+    return {
+      show2: true,
+      show3: false,
+      checkbox: false,
+      rules: {
+        required: value => !!value || 'Required.',
+        min: v => v.length >= 8 || 'Min 8 characters',
+      },
+      formData: {
+        firstname: null,
+        lastname: null,
+        username: null,
+        location: null,
+        email: null,
+        checkbox: null,
+        password1: '',
+        password2: ''
+      },
+      mes: '',
+      snackbar: false,
+      timeout: 2000
+    }
+  },
+  methods: {
+    ...mapMutations(['add']),
+    registerUser() {
+      const {firstname,lastname,username,location,email,checkbox,password1,password2} = this.formData
+      const payload = {firstname,lastname,username,location,email,checkbox,password1,password2}
+      if(!firstname || !lastname || !username || !location || !email || !checkbox || !password1 || !password2) {
+        this.mes = "Every fields must be filled out";
+      }else if(password1 !== password2) {
+        this.mes = "Confirm password is not correct";
+      } else {
+        console.log(payload);
+        this.add(payload)
+        this.mes = "Registered Successfully"
+        this.formData= {
+          firstname: null,
+          lastname: null,
+          username: null,
+          location: null,
+          email: null,
+          checkbox: null,
+          password1: '',
+          password2: ''
+        }         
+      }
+    }
+  }
 }
-
 </script>
 
-<style lang="css" scoped>
-a {
-	margin-left: 920px;
+<style lang="scss" scoped>
+div{
+  margin: auto;
+  position: relative;
+  .register__card {
+    max-width: $card-register-width;
+    max-height: $card-register-height;
+    .register__header {
+      font-family: $font;
+    }
+    .check {
+      margin-left: 30px;
+      margin-right: 0;
+    }
+    .register__button {
+      font-family: $font;
+    }
+  }
 }
-.main {
-	width: 100%;
-	height: 100%;
-	background-color: rgb(32, 33, 36);
-}
-.header{
-	display: flex;
-	justify-content: center;
-	margin-top: 100px;
-	margin-bottom: 0px;
-	color: white;
-}
-.form-container {
-	width: 600px;
-	height: 300px;
-	display: flex;
-	justify-content: center;
-	margin-top: 20px;
-	margin-left: 370px;
-	color: white;
-}
-
 </style>
+

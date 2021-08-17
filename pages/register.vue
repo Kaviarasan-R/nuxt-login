@@ -1,3 +1,3 @@
 <template>
-	<Login />
+	<Register />
 </templatea
